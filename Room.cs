@@ -5,6 +5,7 @@ public class Room
     private int Row { get; }
     private int Col { get; }
     private string Description { get; set; }
+    
 
     public Room(int row, int col)
     {
@@ -15,7 +16,11 @@ public class Room
 
     private static RoomTypes ReturnRoomType(int col, int row)
     {
-        return RoomTypes.Normal;
+        World getWorldSize = new();
+        
+        if(col == 0 && row == 0) return RoomTypes.Entrance;
+        
+        
     }
 
     private string RoomEffects(int col, int row)
@@ -59,7 +64,7 @@ public class Room
         return info + Description;
     }
 
-    private enum RoomTypes
+    public enum RoomTypes
     {
         Entrance,
         Fountain,
