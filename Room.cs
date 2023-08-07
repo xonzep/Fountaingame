@@ -10,21 +10,17 @@ public class Room
     {
         Row = row;
         Col = col;
-        Description = RoomEffects();
+        Description = RoomEffects(row, col);
     }
 
     private static RoomTypes ReturnRoomType(int col, int row)
     {
-        if (col == 0 && row == 0) return RoomTypes.Entrance;
-        
-        //if (col == col  && row == row / 2) return RoomTypes.Fountain;
-
         return RoomTypes.Normal;
     }
 
-    private string RoomEffects()
+    private string RoomEffects(int col, int row)
     {
-        switch (ReturnRoomType(Col, Row))
+        switch (ReturnRoomType(col, row))
         {
             case RoomTypes.Entrance:
                 Description = "You see light coming from the cave entrance";
@@ -34,13 +30,16 @@ public class Room
                 return Description;
             
             case RoomTypes.Normal:
+                Description = "Does this work?";
                 return Description;
             
             case RoomTypes.PastMap:
                  return Description;
             
             default:
+            {
                 throw new ArgumentOutOfRangeException();
+            }
         }
     }
     
@@ -55,7 +54,7 @@ public class Room
 
     public override string ToString()
     {
-        string info = $"You enter the room at {Row} and {Col}. /n";
+        string info = $"You enter the room at {Row} and {Col}. ";
         
         return info + Description;
     }

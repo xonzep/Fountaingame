@@ -1,45 +1,51 @@
+using System.Data;
+
 namespace FountainOfObjects;
-
-
 
 public class World
 {
-   private readonly string _userInput = InputUtils.GetStringToLower("What size world would you like? Options are: Small, Medium, and Large", "That is not an option.");
-    
    //the (int, int) is our KEY which is col and rows. The Room is our VALUE.
    private Dictionary<(int, int), Room> _roomMap = new Dictionary<(int, int), Room>();
-
-   private WorldSize PickWorldSize()
-   {
-      return _userInput switch
-      {
-         "small" => WorldSize.Small,
-         "medium" => WorldSize.Medium,
-         "large" => WorldSize.Large,
-         _ => WorldSize.Small
-      };
-   }
+    
    
-   private void AddRooms(int roomAmount)
+   private WorldSize UserChooseWorldSize()
    {
-      int centerRow = roomAmount - 1;
-      int centerCol = roomAmount / 2;
-      
-      for (int row = 0; row < roomAmount; row++)
+      while (true)
       {
-         for (int col = -centerCol; col <= centerCol; col++)
+          Console.WriteLine("What size world would you like? Options are: 'small', 'medium', or 'large'.");
+          string userInput = Console.ReadLine().ToLower();
+
+         switch (userInput)
          {
-            int adjustedRow = centerRow - row;
-            (int adjustedRow, int col) coordinates = (adjustedRow, col);
-            Room room = new(row, col);
-            _roomMap.Add(coordinates, room);
+            case "small":
+               return WorldSize.Small;
+            case "medium":
+               return WorldSize.Medium;
+            case "large":
+               return WorldSize.Large;
+            default:
+               Console.WriteLine("Invalid input. Please enter 'small', 'medium', or 'large'.");
+               break;
          }
+
       }
    }
    
-   private void SetWorldSize()
+   private void AddRooms(int gridSize)
    {
-      switch (PickWorldSize())
+       for (int row = 0; row < gridSize; row++)
+       {
+          for (int col = 0; col < gridSize; col++)
+          {
+             Room room = new Room(row, col);
+             _roomMap.Add((row, col), room);
+          }
+       }
+   }
+   
+   public void SetWorldSize()
+   {
+      switch (UserChooseWorldSize())
       {
          case WorldSize.Small:
             AddRooms(4);
@@ -57,6 +63,7 @@ public class World
             throw new ArgumentOutOfRangeException();
       }
    }
+    
 
    private enum WorldSize
    {
