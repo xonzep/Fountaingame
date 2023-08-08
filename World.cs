@@ -10,7 +10,6 @@ public class World
 {
    //the (int, int) is our KEY which is col and rows. The Room is our VALUE.
    private Dictionary<(int, int), Room> _roomMap = new Dictionary<(int, int), Room>();
-   
    private static WorldSize UserChooseWorldSize()
    {
       
@@ -35,33 +34,53 @@ public class World
       }
    }
 
+   public static Room.RoomTypes ReturnRoomType(int col, int row, int gridSize)
+   {
+      int randomCol = new HelperUtils().ReturnRandom(gridSize);
+      int randomRow = new HelperUtils().ReturnRandom(gridSize);
+       
+      if(col == 0 && row == 0) return Room.RoomTypes.Entrance;
+
+      foreach (Room.RoomTypes type in Enum.GetValues(typeof(Room.RoomTypes)))
+      {
+         AddRooms(randomRow, randomCol, type);
+         
+      }
+      
+      
+      return Room.RoomTypes.Normal;
+
+
+   }
    private void GenerateRoomTypes(int numRows, int numCols, int numRooms)
    {
       int spacing = Math.Max(numRows, numCols) / numRooms;
       int row = spacing / 2;
       int col = spacing / 2;
    }
-   private void AddRooms(int gridSize)
+   private void AddRooms(int gridSize, Room.RoomTypes rType)
    {
        for (int row = 0; row < gridSize; row++)
        {
           for (int col = 0; col < gridSize; col++)
           {
-             Room room = new Room(row, col);
+             Room room = new(row, col, rType);
              _roomMap.Add((row, col), room);
           }
        }
    }
    
+   
    public WorldSize ReturnWorldSize = UserChooseWorldSize();
    public void SetWorldSize()
    {
+      
       switch (ReturnWorldSize)
       {
          case WorldSize.Small:
             AddRooms(4);
 
-            foreach (var kvp in _roomMap)
+            foreach (KeyValuePair<(int, int), Room> kvp in _roomMap)
             {
                Console.WriteLine($"{kvp.Key}, {kvp.Value}");
             }
@@ -79,11 +98,6 @@ public class World
          default:
             throw new ArgumentOutOfRangeException();
       }
-   }
-
-   private void AddRoomType(int row, int col, Room.RoomTypes type)
-   {
-      _roomMap[(row, col)] = type;
    }
 
 

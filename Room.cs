@@ -1,53 +1,43 @@
+
 namespace FountainOfObjects;
 
 public class Room
 {
     private int Row { get; }
     private int Col { get; }
-    private string Description { get; set; }
+    private RoomTypes RTypes { get; set; }
     
 
-    public Room(int row, int col)
+    public Room(int row, int col, RoomTypes rTypes)
     {
         Row = row;
         Col = col;
-        Description = RoomEffects(row, col);
+        RTypes = rTypes;
     }
 
-    private static RoomTypes ReturnRoomType(int col, int row)
-    {
-        World getWorldSize = new();
-        
-        if(col == 0 && row == 0) return RoomTypes.Entrance;
-        
-        
-    }
+   
 
-    private string RoomEffects(int col, int row)
+    private string RoomDescription(int col, int row)
     {
-        switch (ReturnRoomType(col, row))
+        RoomTypes roomType = World.ReturnRoomType(col, row);
+        
+        //Apparently we can use a dictionary to return our description instead of a switch statement.
+        Dictionary<RoomTypes, string> typeDescriptions = new Dictionary<RoomTypes, string>
         {
-            case RoomTypes.Entrance:
-                Description = "You see light coming from the cave entrance";
-                return Description;
-            
-            case RoomTypes.Fountain:
-                return Description;
-            
-            case RoomTypes.Normal:
-                Description = "Does this work?";
-                return Description;
-            
-            case RoomTypes.PastMap:
-                 return Description;
-            
-            default:
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+            { RoomTypes.Entrance, "You see light coming from the cave entrance" },
+            { RoomTypes.Fountain, "The sound of flowing water fills the room" },
+            { RoomTypes.Normal, "A quiet and ordinary room" },
+            { RoomTypes.PastMap, "There is a wall here." }
+        };
+        
+        if (typeDescriptions.TryGetValue(roomType, out string? description))
+        {
+            return description;
         }
-    }
     
+        throw new ArgumentOutOfRangeException();
+    }
+
 
     private bool FountainRoom()
     {
@@ -61,7 +51,7 @@ public class Room
     {
         string info = $"You enter the room at {Row} and {Col}. ";
         
-        return info + Description;
+        return info + RoomDescription(Row, Col);
     }
 
     public enum RoomTypes
