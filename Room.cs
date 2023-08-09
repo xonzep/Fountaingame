@@ -1,64 +1,57 @@
 
 namespace FountainOfObjects;
 
+
+/*
+ * Room handles it's location(col, row), room type, and description. World just needs to the map and then take in the room object.
+ * Keep track of what order I'm calling col and row.
+ */
+
+
 public class Room
 {
-    private int Row { get; }
-    private int Col { get; }
-    private RoomTypes RTypes { get; set; }
-    
+    private int _row;
+    private int _col;
 
-    public Room(int row, int col, RoomTypes rTypes)
+    private string _description;
+
+    public RoomTypes RoomTypes { get; }
+
+    public Room(int col, int row, RoomTypes roomTypes)
     {
-        Row = row;
-        Col = col;
-        RTypes = rTypes;
+        _col = col;
+        _row = row;
+        RoomTypes = roomTypes;
+        _description = RoomDescription();
     }
-
-   
-
-    private string RoomDescription(int col, int row)
+    
+    private string RoomDescription()
     {
-        RoomTypes roomType = World.ReturnRoomType(col, row);
         
         //Apparently we can use a dictionary to return our description instead of a switch statement.
-        Dictionary<RoomTypes, string> typeDescriptions = new Dictionary<RoomTypes, string>
-        {
-            { RoomTypes.Entrance, "You see light coming from the cave entrance" },
-            { RoomTypes.Fountain, "The sound of flowing water fills the room" },
-            { RoomTypes.Normal, "A quiet and ordinary room" },
+        Dictionary<RoomTypes, string> typeDescriptions = new()
+        {           //key                   //Value
+            { RoomTypes.Entrance, "You see light coming from the cave entrance." },
+            { RoomTypes.Fountain, "The sound of flowing water fills the room." },
+            { RoomTypes.Empty, "A quiet and ordinary room." },
             { RoomTypes.PastMap, "There is a wall here." }
         };
         
-        if (typeDescriptions.TryGetValue(roomType, out string? description))
+        if (typeDescriptions.TryGetValue(RoomTypes, out string? description))
         {
             return description;
         }
     
         throw new ArgumentOutOfRangeException();
     }
-
-
-    private bool FountainRoom()
-    {
-        bool isFountain = false;
-
-        return isFountain;
-    }
-    
-
-    public override string ToString()
-    {
-        string info = $"You enter the room at {Row} and {Col}. ";
-        
-        return info + RoomDescription(Row, Col);
-    }
-
-    public enum RoomTypes
-    {
-        Entrance,
-        Fountain,
-        Normal,
-        PastMap
-    }
 }
+
+public enum RoomTypes
+{
+    Empty,
+    Entrance,
+    Fountain,
+    PastMap
+}
+//The location of objects.
+public record Location(int Row, int Col);
