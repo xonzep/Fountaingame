@@ -2,5 +2,6 @@
 
 using FountainOfObjects;
 
-World world = new World();
+World world = new();
+
 world.SetWorldSize();

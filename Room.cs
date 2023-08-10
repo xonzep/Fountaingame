@@ -3,8 +3,7 @@ namespace FountainOfObjects;
 
 
 /*
- * Room handles it's location(col, row), room type, and description. World just needs to the map and then take in the room object.
- * Keep track of what order I'm calling col and row.
+ * Room handles it's location(col, row), room type, and description. World just needs the map and then take in the room object.
  */
 
 
@@ -15,7 +14,7 @@ public class Room
 
     private string _description;
 
-    public RoomTypes RoomTypes { get; }
+    public RoomTypes RoomTypes { get; set; }
 
     public Room(int col, int row, RoomTypes roomTypes)
     {
@@ -33,8 +32,8 @@ public class Room
         {           //key                   //Value
             { RoomTypes.Entrance, "You see light coming from the cave entrance." },
             { RoomTypes.Fountain, "The sound of flowing water fills the room." },
-            { RoomTypes.Empty, "A quiet and ordinary room." },
-            { RoomTypes.PastMap, "There is a wall here." }
+            { RoomTypes.Empty,    "A quiet and ordinary room." },
+            { RoomTypes.PastMap,  "There is a wall here." }
         };
         
         if (typeDescriptions.TryGetValue(RoomTypes, out string? description))
@@ -53,5 +52,3 @@ public enum RoomTypes
     Fountain,
     PastMap
 }
-//The location of objects.
-public record Location(int Row, int Col);

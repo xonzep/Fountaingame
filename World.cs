@@ -1,9 +1,11 @@
+
+
 namespace FountainOfObjects;
 
 
 public class World
 {
-    private Dictionary<(int, int), Room> _roomMap = new();
+    private readonly Dictionary<(int, int), Room> _roomMap = new();
 
     private static WorldSize UserChooseWorldSize()
     {
@@ -16,6 +18,7 @@ public class World
             switch (userInput)
             {
                 case "small":
+                    Console.Clear();
                     return WorldSize.Small;
                 case "medium":
                     return WorldSize.Medium;
@@ -31,6 +34,7 @@ public class World
 
     private void AddRooms(int gridSize)
     {
+        //Add all the rooms we need for our map. They are all set as Empty Room Type to start.
         for (int row = 0; row < gridSize; row++)
         {
             for (int col = 0; col < gridSize; col++)
@@ -38,7 +42,15 @@ public class World
                 _roomMap.Add((row, col), new Room(col, row, RoomTypes.Empty));
             }
         }
+        //Change empty type rooms to others based on a percentage. We don't need this quite yet.
+        //PercentageRoomChange();
+        //Set rooms that don't change.
+        SetSpecialRooms();
+        
+    }
 
+    private void PercentageRoomChange()
+    {
         foreach (KeyValuePair<(int, int), Room> roomEntry in _roomMap)
         {
             (int col, int row) = roomEntry.Key;
@@ -48,20 +60,42 @@ public class World
             {
                 continue;
             }
+            
+            _roomMap[(row, col)] = room;
         }
     }
 
+    private void SetSpecialRooms()
+    {
+        if(_roomMap.TryGetValue((0,0), out Room? entranceRoom))
+        {
+            /*
+             *There should be a better way to do this, we're getting the return which is RoomTypes.Empty and saving it to
+             *entranceRoom. Then we're changing the returned room's roomType to entrance.
+             *Then we're calling the Map at 0, 0 and adding the room with the changed RoomType. 
+             */
+            entranceRoom.RoomTypes = RoomTypes.Entrance;
+            _roomMap[(0, 0)] = entranceRoom;
+        }
+
+        if (_roomMap.TryGetValue((2, 3), out Room? fountainRoom))
+        {
+            fountainRoom.RoomTypes = RoomTypes.Fountain;
+            _roomMap[(2, 3)] = fountainRoom;
+        }
+    }
+    
+    
     public void SetWorldSize()
     {
-
         switch (UserChooseWorldSize())
         {
             case WorldSize.Small:
                 AddRooms(4);
-
+                //for testing 
                 foreach (KeyValuePair<(int, int), Room> kvp in _roomMap)
                 {
-                    Console.WriteLine($"{kvp.Key}, {kvp.Value}");
+                    Console.WriteLine($"{kvp.Key}, {kvp.Value.RoomTypes}");
                 }
 
                 break;
@@ -86,4 +120,7 @@ public enum WorldSize
     Medium,
     Large
 }
+
+//The location of objects. Seems better to store it here.
+public record Location(int Col, int Row);
 

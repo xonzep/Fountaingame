@@ -2,7 +2,7 @@ namespace FountainOfObjects;
 
 public static class HelperUtils
 {
-    //Create new ling with color.
+    //Create new line with color.
     public static void WriteColorLine(string text, ConsoleColor color)
     {
         Console.ForegroundColor = color;
@@ -18,15 +18,14 @@ public static class HelperUtils
     
     
     //Generate random numbers.
-    private static readonly Random Random = new Random();
+    public static double RandomPercent()
+    {
+        Random random = new();
+        return random.NextDouble();
+    }
 
     private static int GetRandomNumber(Random random, int maxValue)
     {
         return random.Next(maxValue);
-    }
-    public static int ReturnRandom(int gridSize)
-    {
-        int randomCol =  GetRandomNumber(Random, gridSize);
-        return randomCol;
     }
 }
