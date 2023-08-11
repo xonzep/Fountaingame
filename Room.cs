@@ -40,8 +40,8 @@ public class Room
         {
             return description;
         }
-    
-        throw new ArgumentOutOfRangeException();
+
+        return "You should not see this.";
     }
 }
 
