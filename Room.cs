@@ -38,6 +38,7 @@ public class Room
         
         if (typeDescriptions.TryGetValue(RoomTypes, out string? description))
         {
+            HelperUtils.WriteColorLine(description, ConsoleColor.Cyan);
             return description;
         }
 

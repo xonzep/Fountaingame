@@ -107,9 +107,11 @@ public class World
                 break;
 
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new InvalidOperationException("Invalid World Size Chosen.");
         }
     }
+
+    
 }
 
 public enum WorldSize
@@ -120,5 +122,5 @@ public enum WorldSize
 }
 
 //The location of objects. Seems better to store it here.
-public record Location(int Col, int Row);
+public abstract record Location(int Col, int Row);
 
