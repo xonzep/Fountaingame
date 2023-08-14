@@ -7,11 +7,11 @@ public class Player
 {
     public Location Location { get; set; }
     public int Health { get; set; }
-    private readonly Dictionary<(int, int), RoomTypes> _roomMap;
+    private readonly Dictionary<(int, int), Room> _roomMap;
     public bool IsAlive { get; set; }
     
     //Constructor takes in the room map, and the players location most importantly.
-    private Player(Location location, Dictionary<(int, int), RoomTypes> roomMap, int health, bool isAlive)
+    public Player(Location location, Dictionary<(int, int), Room> roomMap, int health, bool isAlive)
     {
         Location = location;
         Health = health;
@@ -19,8 +19,29 @@ public class Player
         IsAlive = isAlive;
     }
     
-    public bool IsOnMap(Location location) => location.Row >= 0 && location.Row <= _roomMap.Count &&
-                                              location.Col >= 0 && location.Col <= _roomMap.Count;
+    public bool IsOnMap(Location location) => location.Row >= 0 && location.Row <= _roomMap.Length &&
+                                              location.Col >= 0 && location.Col <= _roomMap.Length;
+
+    private Direction GetDirection(string userInput)
+   {
+       return userInput switch
+       {
+           "north" => Direction.North,
+           "south" => Direction.South,
+           "east" => Direction.East,
+           "west" => Direction.West,
+           _ => Direction.NoDirection
+       };
+   }
+   
+   public Direction UserInput()
+   {
+       HelperUtils.WriteColorLine("What do you want to do?", ConsoleColor.Green);
+       string userInput = Console.ReadLine().ToLower();
+       return GetDirection(userInput);
+            
+
+   }
 
 }
 
@@ -35,8 +56,11 @@ public enum Direction
     North,
     South,
     East,
-    West
+    West,
+    NoDirection
 }
+
+
 
 public class MoveCommand: ICommand
 {

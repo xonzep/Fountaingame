@@ -3,7 +3,7 @@ namespace FountainOfObjects;
 
 public class World
 {
-    private readonly Dictionary<(int, int), Room> _roomMap = new();
+    public readonly Dictionary<(int, int), Room> _roomMap = new();
 
     private static WorldSize UserChooseWorldSize()
     {
@@ -90,12 +90,6 @@ public class World
         {
             case WorldSize.Small:
                 AddRooms(4);
-                //for testing 
-                foreach (KeyValuePair<(int, int), Room> kvp in _roomMap)
-                {
-                    Console.WriteLine($"{kvp.Key}, {kvp.Value.RoomTypes}");
-                }
-
                 break;
 
             case WorldSize.Medium:
@@ -122,5 +116,5 @@ public enum WorldSize
 }
 
 //The location of objects. Seems better to store it here.
-public abstract record Location(int Col, int Row);
+public record Location(int Col, int Row);
 

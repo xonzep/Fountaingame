@@ -2,6 +2,4 @@
 
 using FountainOfObjects;
 
-World world = new();
-
-world.SetWorldSize();
+Game.Run();
