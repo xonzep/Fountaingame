@@ -4,6 +4,7 @@ namespace FountainOfObjects;
 public class World
 {
     public readonly Dictionary<(int, int), Room> _roomMap = new();
+    public int GridSize;
 
     private static WorldSize UserChooseWorldSize()
     {
@@ -16,7 +17,6 @@ public class World
             switch (userInput)
             {
                 case "small":
-                    Console.Clear();
                     return WorldSize.Small;
                 case "medium":
                     return WorldSize.Medium;
@@ -32,6 +32,7 @@ public class World
 
     private void AddRooms(int gridSize)
     {
+        GridSize = gridSize;
         //Add all the rooms we need for our map. They are all set as Empty Room Type to start.
         for (int row = 0; row < gridSize; row++)
         {
@@ -46,6 +47,12 @@ public class World
         SetSpecialRooms();
         
     }
+
+    public int GetGridSize()
+    {
+        return GridSize;
+    }
+    
 
     private void PercentageRoomChange()
     {
@@ -82,7 +89,13 @@ public class World
             _roomMap[(2, 3)] = fountainRoom;
         }
     }
-    
+
+    public string GetRoomLocDesc(Player player)
+    {
+        _roomMap.TryGetValue((player.Location.Col, player.Location.Row), out Room roomDesc);
+        return roomDesc.Description;
+
+    }
     
     public void SetWorldSize()
     {
@@ -104,7 +117,7 @@ public class World
                 throw new InvalidOperationException("Invalid World Size Chosen.");
         }
     }
-
+    
     
 }
 

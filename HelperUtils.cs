@@ -2,7 +2,7 @@ namespace FountainOfObjects;
 
 public static class HelperUtils
 {
-    static Random random = new();
+    private static readonly Random Random = new();
     //Create new line with color.
     public static void WriteColorLine(string text, ConsoleColor color)
     {
@@ -23,11 +23,11 @@ public static class HelperUtils
     //Generate random numbers.
     public static double GenerateRandomPercent()
     {
-        return random.NextDouble();
+        return Random.NextDouble();
     }
 
     private static int GetRandomNumber(int maxValue)
     {
-        return random.Next(maxValue);
+        return Random.Next(maxValue);
     }
 }

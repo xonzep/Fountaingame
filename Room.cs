@@ -11,8 +11,8 @@ public class Room
 {
     private int _row;
     private int _col;
-
-    private string _description;
+    
+    public string Description { get; }
 
     public RoomTypes RoomTypes { get; set; }
 
@@ -21,10 +21,10 @@ public class Room
         _col = col;
         _row = row;
         RoomTypes = roomTypes;
-        _description = RoomDescription();
+        Description = RoomDescription(roomTypes);
     }
     
-    private string RoomDescription()
+    public string RoomDescription(RoomTypes roomType)
     {
         
         //Apparently we can use a dictionary to return our description instead of a switch statement.
@@ -32,24 +32,23 @@ public class Room
         {           //key                   //Value
             { RoomTypes.Entrance, "You see light coming from the cave entrance." },
             { RoomTypes.Fountain, "The sound of flowing water fills the room." },
-            { RoomTypes.Empty,    "A quiet and ordinary room." },
-            { RoomTypes.PastMap,  "There is a wall here." }
+            { RoomTypes.Empty,    "A quiet and ordinary room." }
         };
         
-        if (typeDescriptions.TryGetValue(RoomTypes, out string? description))
+        if (typeDescriptions.TryGetValue(roomType, out string? description))
         {
-            HelperUtils.WriteColorLine(description, ConsoleColor.Cyan);
             return description;
         }
 
         return "You should not see this.";
     }
+
+    
 }
 
 public enum RoomTypes
 {
     Empty,
     Entrance,
-    Fountain,
-    PastMap
+    Fountain
 }
