@@ -9,17 +9,17 @@ namespace FountainOfObjects;
 
 public class Room
 {
-    private int _row;
-    private int _col;
+    private int Row { get; set; }
+    private int Col { get; set; }
     
-    public string Description { get; }
+    public string Description { get; set; }
 
     public RoomTypes RoomTypes { get; set; }
 
     public Room(int col, int row, RoomTypes roomTypes)
     {
-        _col = col;
-        _row = row;
+        Col = col;
+        Row = row;
         RoomTypes = roomTypes;
         Description = RoomDescription(roomTypes);
     }

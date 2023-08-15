@@ -3,7 +3,7 @@ namespace FountainOfObjects;
 
 public class World
 {
-    public readonly Dictionary<(int, int), Room> _roomMap = new();
+    public readonly Dictionary<(int, int), Room> RoomMap = new();
     public int GridSize;
 
     private static WorldSize UserChooseWorldSize()
@@ -38,7 +38,7 @@ public class World
         {
             for (int col = 0; col < gridSize; col++)
             {
-                _roomMap.Add((row, col), new Room(col, row, RoomTypes.Empty));
+                RoomMap.Add((row, col), new Room(col, row, RoomTypes.Empty));
             }
         }
         //Change empty type rooms to others based on a percentage. We don't need this quite yet.
@@ -56,7 +56,7 @@ public class World
 
     private void PercentageRoomChange()
     {
-        foreach (KeyValuePair<(int, int), Room> roomEntry in _roomMap)
+        foreach (KeyValuePair<(int, int), Room> roomEntry in RoomMap)
         {
             (int col, int row) = roomEntry.Key;
             Room room = roomEntry.Value;
@@ -66,34 +66,46 @@ public class World
                 continue;
             }
             
-            _roomMap[(row, col)] = room;
+            RoomMap[(row, col)] = room;
         }
     }
 
     private void SetSpecialRooms()
     {
-        if(_roomMap.TryGetValue((0,0), out Room? entranceRoom))
+        /*if(RoomMap.TryGetValue((0,0), out Room? entranceRoom))
         {
-            /*
+            
              *There should be a better way to do this, we're getting the return which is RoomTypes.Empty and saving it to
              *entranceRoom. Then we're changing the returned room's roomType to entrance.
              *Then we're calling the Map at 0, 0 and adding the room with the changed RoomType. 
              */
-            entranceRoom.RoomTypes = RoomTypes.Entrance;
-            _roomMap[(0, 0)] = entranceRoom;
-        }
+            /*entranceRoom.RoomTypes = RoomTypes.Entrance;
+            entranceRoom.Description = entranceRoom.RoomDescription(RoomTypes.Entrance);
+            RoomMap[(0, 0)] = entranceRoom;
+            
+            }*/
+            
+            /*if (RoomMap.TryGetValue((2, 3), out Room? fountainRoom))
+       {
+           fountainRoom.RoomTypes = RoomTypes.Fountain;
+           RoomMap[(2, 3)] = fountainRoom;
+       }
+       */
+            
+            
+        //Better way?
+            RoomMap[(0, 0)] = new Room(0, 0, RoomTypes.Entrance);
+            RoomMap[(2, 3)] = new Room(2, 3, RoomTypes.Fountain);
+        
 
-        if (_roomMap.TryGetValue((2, 3), out Room? fountainRoom))
-        {
-            fountainRoom.RoomTypes = RoomTypes.Fountain;
-            _roomMap[(2, 3)] = fountainRoom;
-        }
+       
     }
 
     public string GetRoomLocDesc(Player player)
     {
-        _roomMap.TryGetValue((player.Location.Col, player.Location.Row), out Room roomDesc);
-        return roomDesc.Description;
+        RoomMap.TryGetValue((player.Location.Col, player.Location.Row), out Room? roomDesc);
+        
+        return roomDesc!.Description;
 
     }
     

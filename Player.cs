@@ -27,7 +27,7 @@ public class Player
               location.Col >= 0 && location.Col < _world.GridSize;
     }
 
-    private static Direction GetDirection(string userInput)
+    private static Direction GetDirection(string? userInput)
    {
        return userInput switch
        {
@@ -42,9 +42,8 @@ public class Player
    public static Direction UserInput()
    {
        HelperUtils.WriteColorLine("What do you want to do?", ConsoleColor.Green);
-       string userInput = Console.ReadLine().ToLower();
+       string? userInput = Console.ReadLine()?.ToLower();
        Direction direction = GetDirection(userInput);
-       Console.WriteLine($"Direction chosen: {direction}");
        return direction;
 
 
