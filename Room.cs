@@ -31,7 +31,8 @@ public class Room
         Dictionary<RoomTypes, string> typeDescriptions = new()
         {           //key                   //Value
             { RoomTypes.Entrance, "You see light coming from the cave entrance." },
-            { RoomTypes.Fountain, "The sound of flowing water fills the room." },
+            { RoomTypes.Fountain, "There is a dripping sound here." },
+            { RoomTypes.FountainOn, "The sound of flowing water fills the room." },
             { RoomTypes.Empty,    "A quiet and ordinary room." }
         };
         
@@ -50,5 +51,6 @@ public enum RoomTypes
 {
     Empty,
     Entrance,
-    Fountain
+    Fountain,
+    FountainOn
 }

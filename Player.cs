@@ -1,8 +1,6 @@
 
 namespace FountainOfObjects;
 
-
-
 public class Player
 {
     public Location Location { get; set; }
@@ -10,6 +8,7 @@ public class Player
     
     private readonly World _world;
     public bool IsAlive { get; set; }
+    public bool FountainOn { get; set; }
     
     
     //Constructor takes in the room map, and the players location most importantly.
@@ -19,6 +18,7 @@ public class Player
         Health = health;
         IsAlive = isAlive;
         _world = world;
+        FountainOn = false;
     }
 
     public bool IsOnMap(Location location)
@@ -26,34 +26,34 @@ public class Player
        return location.Row >= 0 && location.Row < _world.GridSize &&
               location.Col >= 0 && location.Col < _world.GridSize;
     }
+    
 
-    private static Direction GetDirection(string? userInput)
+    private Direction UserInput(string? userInput)
    {
+       
        return userInput switch
        {
            "north" => Direction.North,
            "south" => Direction.South,
            "east" => Direction.East,
            "west" => Direction.West,
-           _ => Direction.NoDirection
+           "quit" => Direction.Quit,
+           "exit" => Direction.Quit,
+           "turn on" => Direction.TurnOn,
+           _ => Direction.Quit
        };
    }
    
-   public static Direction UserInput()
+   public Direction UserInputSelection()
    {
-       HelperUtils.WriteColorLine("What do you want to do?", ConsoleColor.Green);
+       HelperUtils.WriteColorLine("What do you want to do? Options are 'North', 'South', 'East', 'West', 'Turn On', 'Quit' ", ConsoleColor.Green);
        string? userInput = Console.ReadLine()?.ToLower();
-       Direction direction = GetDirection(userInput);
+       Direction direction = UserInput(userInput);
        return direction;
-
-
+       
    }
+    
 
-}
-
-public interface ICommand
-{
-    void Execute(Player player);
 }
 
 //North is UP, South is DOWN, East is RIGHT, West is LEFT
@@ -63,41 +63,7 @@ public enum Direction
     South,
     East,
     West,
-    NoDirection
+    Quit,
+    TurnOn
 }
 
-
-
-public class MoveCommand: ICommand
-{
-    private Direction Direction { get; }
-    
-    public MoveCommand(Direction direction)
-    {
-        Direction = direction;
-    }
-    public void Execute(Player player)
-    {
-        Location currentLocation = player.Location;
-        Location newLocation = Direction switch
-        {
-            //the With keyword allows the record to be copied over and just update the location.Row or Col while keeping
-            //the opposite intact.
-            Direction.North => currentLocation with { Row = currentLocation.Row -1 },
-            Direction.South => currentLocation with { Row = currentLocation.Row +1 },
-            Direction.East => currentLocation with { Col = currentLocation.Col +1 },
-            Direction.West => currentLocation with { Col = currentLocation.Col -1 },
-            _ => throw new InvalidOperationException("That is not an option.")
-        };
-
-        if (player.IsOnMap(newLocation))
-        {
-            player.Location = newLocation;
-            
-        }
-        else
-        {
-            HelperUtils.WriteColorLine("There is a wall there and you cannot move forward.", ConsoleColor.Red);
-        }
-    }
-}

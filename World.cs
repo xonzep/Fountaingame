@@ -3,8 +3,9 @@ namespace FountainOfObjects;
 
 public class World
 {
-    public readonly Dictionary<(int, int), Room> RoomMap = new();
-    public int GridSize;
+    private readonly Dictionary<(int, int), Room> _roomMap = new();
+    public int GridSize { get; private set; }
+    public bool GameFinished;
 
     private static WorldSize UserChooseWorldSize()
     {
@@ -38,7 +39,7 @@ public class World
         {
             for (int col = 0; col < gridSize; col++)
             {
-                RoomMap.Add((row, col), new Room(col, row, RoomTypes.Empty));
+                _roomMap.Add((row, col), new Room(col, row, RoomTypes.Empty));
             }
         }
         //Change empty type rooms to others based on a percentage. We don't need this quite yet.
@@ -47,16 +48,11 @@ public class World
         SetSpecialRooms();
         
     }
-
-    public int GetGridSize()
-    {
-        return GridSize;
-    }
     
 
     private void PercentageRoomChange()
     {
-        foreach (KeyValuePair<(int, int), Room> roomEntry in RoomMap)
+        foreach (KeyValuePair<(int, int), Room> roomEntry in _roomMap)
         {
             (int col, int row) = roomEntry.Key;
             Room room = roomEntry.Value;
@@ -66,47 +62,46 @@ public class World
                 continue;
             }
             
-            RoomMap[(row, col)] = room;
+            _roomMap[(row, col)] = room;
         }
     }
 
     private void SetSpecialRooms()
     {
-        /*if(RoomMap.TryGetValue((0,0), out Room? entranceRoom))
-        {
-            
-             *There should be a better way to do this, we're getting the return which is RoomTypes.Empty and saving it to
-             *entranceRoom. Then we're changing the returned room's roomType to entrance.
-             *Then we're calling the Map at 0, 0 and adding the room with the changed RoomType. 
-             */
-            /*entranceRoom.RoomTypes = RoomTypes.Entrance;
-            entranceRoom.Description = entranceRoom.RoomDescription(RoomTypes.Entrance);
-            RoomMap[(0, 0)] = entranceRoom;
-            
-            }*/
-            
-            /*if (RoomMap.TryGetValue((2, 3), out Room? fountainRoom))
-       {
-           fountainRoom.RoomTypes = RoomTypes.Fountain;
-           RoomMap[(2, 3)] = fountainRoom;
-       }
-       */
-            
-            
-        //Better way?
-            RoomMap[(0, 0)] = new Room(0, 0, RoomTypes.Entrance);
-            RoomMap[(2, 3)] = new Room(2, 3, RoomTypes.Fountain);
-        
-
-       
+            _roomMap[(0, 0)] = new Room(0, 0, RoomTypes.Entrance);
+            _roomMap[(2, 3)] = new Room(2, 3, RoomTypes.Fountain);
     }
 
-    public string GetRoomLocDesc(Player player)
+    public void TurnOn(Direction turnOn)
     {
-        RoomMap.TryGetValue((player.Location.Col, player.Location.Row), out Room? roomDesc);
         
-        return roomDesc!.Description;
+            if ( turnOn == Direction.TurnOn && Game.InFountainRoom)
+            {
+                _roomMap[(2, 3)] = new Room(2, 3, RoomTypes.FountainOn);
+            }
 
+            Game.FountainOn = true;
+    }
+
+    public Room ReturnRoom(Player player)
+    {
+        _roomMap.TryGetValue((player.Location.Col, player.Location.Row), out Room? room);
+        return room!;
+    }
+    
+
+    public void CheckWinState(Player player)
+    {
+        Room room = ReturnRoom(player);
+        if (room.RoomTypes == RoomTypes.Entrance && Game.FountainOn)
+        {
+            HelperUtils.WriteColorLine("The Fountain is running. You have done what you've come to do. You leave with a lighter heart.", ConsoleColor.DarkYellow);
+            GameFinished = true;
+        }
+        else if(room.RoomTypes == RoomTypes.Entrance && !Game.FountainOn)
+        {
+            HelperUtils.WriteColorLine("There is something you need to do before leaving.", ConsoleColor.Cyan);
+        }
     }
     
     public void SetWorldSize()
