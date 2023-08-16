@@ -38,7 +38,6 @@ public class Player
            "east" => Direction.East,
            "west" => Direction.West,
            "quit" => Direction.Quit,
-           "exit" => Direction.Quit,
            "turn on" => Direction.TurnOn,
            _ => Direction.Quit
        };

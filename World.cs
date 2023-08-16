@@ -65,13 +65,13 @@ public class World
             _roomMap[(row, col)] = room;
         }
     }
-
     private void SetSpecialRooms()
     {
             _roomMap[(0, 0)] = new Room(0, 0, RoomTypes.Entrance);
             _roomMap[(2, 3)] = new Room(2, 3, RoomTypes.Fountain);
     }
 
+    //Remove this once our sense is working?
     public void TurnOn(Direction turnOn)
     {
         
@@ -83,16 +83,16 @@ public class World
             Game.FountainOn = true;
     }
 
-    public Room ReturnRoom(Player player)
+    public Room ReturnRoom(Location location)
     {
-        _roomMap.TryGetValue((player.Location.Col, player.Location.Row), out Room? room);
+        _roomMap.TryGetValue((location.Col, location.Row), out Room? room);
         return room!;
     }
     
 
     public void CheckWinState(Player player)
     {
-        Room room = ReturnRoom(player);
+        Room room = ReturnRoom(player.Location);
         if (room.RoomTypes == RoomTypes.Entrance && Game.FountainOn)
         {
             HelperUtils.WriteColorLine("The Fountain is running. You have done what you've come to do. You leave with a lighter heart.", ConsoleColor.DarkYellow);

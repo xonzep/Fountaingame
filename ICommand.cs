@@ -30,19 +30,10 @@ public class MoveCommand: ICommand
             HelperUtils.WriteColorLine("You can not do that here.", ConsoleColor.Cyan);
             return;
         }
-        
 
         Location currentLocation = player.Location;
-        Location newLocation = Direction switch
-        {
-            //the With keyword allows the record to be copied over and just update the location.Row or Col while keeping
-            //the opposite intact.
-            Direction.North => currentLocation with { Row = currentLocation.Row -1 },
-            Direction.South => currentLocation with { Row = currentLocation.Row +1 },
-            Direction.East => currentLocation with { Col = currentLocation.Col +1 },
-            Direction.West => currentLocation with { Col = currentLocation.Col -1 },
-            _ => throw new InvalidOperationException("That is not an option.")
-        };
+        Location newLocation = GameUtils.GetLocationInDirection(currentLocation, Direction);
+       
 
         if (player.IsOnMap(newLocation))
         {

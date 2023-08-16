@@ -30,7 +30,7 @@ public static class Game
     {
         while (!World.GameFinished && !QuitRequested)
         {
-            HelperUtils.WriteColorLine(World.ReturnRoom(Player).Description, ConsoleColor.Magenta);
+            HelperUtils.WriteColorLine(World.ReturnRoom(Player.Location).Description, ConsoleColor.Magenta);
             Direction input = Player.UserInputSelection();
             MoveCommand moveCommand = new(input);
             moveCommand.Execute(Player);
