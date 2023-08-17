@@ -12,7 +12,7 @@ public class World
 
         while (true)
         {
-            HelperUtils.WriteColorLine("What size world would you like? Options are: 'small', 'medium', or 'large'.", ConsoleColor.White);
+            HelperUtils.WriteColorLine("What size world would you like to play? Options are: 'small', 'medium', or 'large'.", ConsoleColor.White);
             string userInput = Console.ReadLine()?.ToLower() ?? string.Empty;
 
             switch (userInput)
@@ -96,6 +96,7 @@ public class World
         if (room.RoomTypes == RoomTypes.Entrance && Game.FountainOn)
         {
             HelperUtils.WriteColorLine("The Fountain is running. You have done what you've come to do. You leave with a lighter heart.", ConsoleColor.DarkYellow);
+            Thread.Sleep(5000);
             GameFinished = true;
         }
         else if(room.RoomTypes == RoomTypes.Entrance && !Game.FountainOn)

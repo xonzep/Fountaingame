@@ -1,4 +1,6 @@
 
+using System.Reflection.Metadata.Ecma335;
+
 namespace FountainOfObjects;
 
 public class Player
@@ -29,19 +31,42 @@ public class Player
     
 
     private Direction UserInput(string? userInput)
-   {
-       
-       return userInput switch
+    {
+
+        Direction switchDirection;
+       switch (userInput)
        {
-           "north" => Direction.North,
-           "south" => Direction.South,
-           "east" => Direction.East,
-           "west" => Direction.West,
-           "quit" => Direction.Quit,
-           "turn on" => Direction.TurnOn,
-           _ => Direction.Quit
-       };
-   }
+           case "move north":
+           case "north":
+              switchDirection = Direction.North;
+              break;
+           case "move south":
+           case "south":
+               switchDirection = Direction.South;
+               break;
+           case "move east":
+           case "east":
+               switchDirection = Direction.East;
+               break;
+           case "move west":
+           case "west":
+               switchDirection = Direction.West;
+               break;
+           default:
+               switchDirection = Direction.Unknown;
+               break;
+           
+       }
+        
+
+       if (switchDirection == Direction.Unknown)
+       {
+           HelperUtils.WriteColorLine("That is not an option.", ConsoleColor.Red);
+           UserInputSelection();
+
+       }
+       return switchDirection;
+    }
    
    public Direction UserInputSelection()
    {
@@ -58,11 +83,13 @@ public class Player
 //North is UP, South is DOWN, East is RIGHT, West is LEFT
 public enum Direction
 {
+    Unknown,
     North,
     South,
     East,
     West,
     Quit,
-    TurnOn
+    TurnOn,
+    Sense
 }
 

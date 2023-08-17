@@ -23,13 +23,16 @@ public class MoveCommand: ICommand
 
         if (Direction == Direction.TurnOn && Game.FountainOn)
         {
+            HelperUtils.WriteColorLine("The fountain springs to life! Objects flow like water.", ConsoleColor.Cyan);
             return;
         }
-        else if (Direction == Direction.TurnOn && !Game.FountainOn)
+        
+        if (Direction == Direction.TurnOn && !Game.FountainOn)
         {
             HelperUtils.WriteColorLine("You can not do that here.", ConsoleColor.Cyan);
             return;
         }
+        
 
         Location currentLocation = player.Location;
         Location newLocation = GameUtils.GetLocationInDirection(currentLocation, Direction);

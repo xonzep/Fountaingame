@@ -7,7 +7,7 @@ public static class Game
     public static bool QuitRequested { get;  set; }
     public static bool InFountainRoom { get; set; }
     public static bool FountainOn { get; set; }
-    
+    public static Sense Sense;
 
     static Game()
     {
@@ -15,10 +15,12 @@ public static class Game
         Location start = new(0, 0);
         //shoving the world map here is not the greatest.
         Player = new Player(start, 10, true, World);
+        Sense = new Sense(World, Player);
     }
     public static void Run()
     {
         World.SetWorldSize();
+        //Remove this, it prints the current state of the Bool for testing.
         Console.WriteLine(World.GameFinished);
         //Console.WriteLine("Test " + World.RoomMap[(2,3)].RoomTypes);
         GameLoop();
@@ -36,13 +38,9 @@ public static class Game
             moveCommand.Execute(Player);
             World.CheckWinState(Player);
             World.TurnOn(input);
+            Sense.SenseNearBy();
+
             
-            
-            // if (World.ReturnRoom(Player).RoomTypes == RoomTypes.Fountain)
-            // {
-            //     InFountainRoom = true;
-            // }
-           
             if (QuitRequested)
             {
                 break;
