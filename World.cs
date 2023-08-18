@@ -39,13 +39,13 @@ public class World
         {
             for (int col = 0; col < gridSize; col++)
             {
-                _roomMap.Add((row, col), new Room(col, row, RoomTypes.Empty));
+                _roomMap.Add((row, col), new Room(RoomTypes.Empty));
             }
         }
         //Change empty type rooms to others based on a percentage. We don't need this quite yet.
         //PercentageRoomChange();
         //Set rooms that don't change.
-        SetSpecialRooms();
+        SetEntrance();
         
     }
     
@@ -65,22 +65,27 @@ public class World
             _roomMap[(row, col)] = room;
         }
     }
-    private void SetSpecialRooms()
+    private void SetEntrance()
     {
-            _roomMap[(0, 0)] = new Room(0, 0, RoomTypes.Entrance);
-            _roomMap[(2, 3)] = new Room(2, 3, RoomTypes.Fountain);
+        _roomMap[(0, 0)] = new Room(RoomTypes.Entrance);
+        
     }
 
-    //Remove this once our sense is working?
+    
     public void TurnOn(Direction turnOn)
     {
         
             if ( turnOn == Direction.TurnOn && Game.InFountainRoom)
             {
-                _roomMap[(2, 3)] = new Room(2, 3, RoomTypes.FountainOn);
+                _roomMap[(2, 3)] = new Room(RoomTypes.FountainOn);
             }
 
             Game.FountainOn = true;
+
+            if (turnOn == Direction.TurnOn && Game.InFountainRoom && Game.FountainOn)
+            {
+                HelperUtils.WriteColorLine("The Fountain is already turned on and flowing.", ConsoleColor.Cyan);
+            }
     }
 
     public Room ReturnRoom(Location location)
@@ -93,15 +98,16 @@ public class World
     public void CheckWinState(Player player)
     {
         Room room = ReturnRoom(player.Location);
-        if (room.RoomTypes == RoomTypes.Entrance && Game.FountainOn)
+        switch (room.RoomTypes)
         {
-            HelperUtils.WriteColorLine("The Fountain is running. You have done what you've come to do. You leave with a lighter heart.", ConsoleColor.DarkYellow);
-            Thread.Sleep(5000);
-            GameFinished = true;
-        }
-        else if(room.RoomTypes == RoomTypes.Entrance && !Game.FountainOn)
-        {
-            HelperUtils.WriteColorLine("There is something you need to do before leaving.", ConsoleColor.Cyan);
+            case RoomTypes.Entrance when Game.FountainOn:
+                HelperUtils.WriteColorLine("The Fountain is running. You have done what you've come to do. You leave with a lighter heart.", ConsoleColor.DarkYellow);
+                Thread.Sleep(5000);
+                GameFinished = true;
+                break;
+            case RoomTypes.Entrance when !Game.FountainOn && !Game.QuitRequested:
+                HelperUtils.WriteColorLine("There is something you need to do before leaving.", ConsoleColor.Cyan);
+                break;
         }
     }
     
@@ -111,14 +117,18 @@ public class World
         {
             case WorldSize.Small:
                 AddRooms(4);
+                //Set fountain for world size.
+                _roomMap[(2, 3)] = new Room(RoomTypes.Fountain);
                 break;
 
             case WorldSize.Medium:
                 AddRooms(6);
+                _roomMap[(3, 4)] = new Room(RoomTypes.Fountain);
                 break;
 
             case WorldSize.Large:
-                AddRooms(9);
+                AddRooms(8);
+                _roomMap[(4, 5)] = new Room(RoomTypes.Fountain);
                 break;
 
             default:

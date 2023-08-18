@@ -7,6 +7,7 @@ public interface ICommand
 
 public class MoveCommand: ICommand
 {
+    
     private Direction Direction { get; }
     
     public MoveCommand(Direction direction)
@@ -18,6 +19,12 @@ public class MoveCommand: ICommand
         if(Direction == Direction.Quit)
         {
             Game.QuitRequested = true;
+            return;
+        }
+
+        if (Direction == Direction.Sense)
+        {
+            Game.SenseCalled = true;
             return;
         }
 

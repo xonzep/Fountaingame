@@ -1,8 +1,4 @@
 namespace FountainOfObjects;
-/*I want to remove a few of the descriptions from the Direction portion as that is not the best place for them
- So for this I want to have Fountain description and Entrance description as well as a 'you are close' description here
- so it makes sense to have a sense class.
- */
 
 public class Sense 
 {
@@ -21,6 +17,7 @@ public class Sense
         return _world.ReturnRoom(_player.Location).Description;
     }
 
+    
     public void SenseNearBy()
     {
         Direction[] directionsAroundPlayer = { Direction.North, Direction.East, Direction.South, Direction.West };

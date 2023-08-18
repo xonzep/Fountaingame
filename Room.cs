@@ -3,23 +3,19 @@ namespace FountainOfObjects;
 
 
 /*
- * Room handles it's location(col, row), room type, and description. World just needs the map and then take in the room object.
+ * Room handles it's room type, and description. World just needs the map and then take in the room object.
+ * I use to have the location row and col taken in, but I don't think it's needs as the map dictionary takes that on.
  */
 
 
 public class Room
 {
-    private int Row { get; set; }
-    private int Col { get; set; }
-    
     public string Description { get; set; }
 
     public RoomTypes RoomTypes { get; set; }
 
-    public Room(int col, int row, RoomTypes roomTypes)
+    public Room(RoomTypes roomTypes)
     {
-        Col = col;
-        Row = row;
         RoomTypes = roomTypes;
         Description = RoomDescription(roomTypes);
     }
@@ -32,8 +28,8 @@ public class Room
         {           //key                   //Value
             { RoomTypes.Entrance, "You see light coming from the cave entrance." },
             { RoomTypes.Fountain, "There is a dripping sound here." },
-            { RoomTypes.FountainOn, "The sound of flowing water fills the room." },
-            { RoomTypes.Empty,    "A quiet and ordinary room." }
+            { RoomTypes.FountainOn, "The sound of flowing water fills the room. The Fountain is on." },
+            { RoomTypes.Empty,    "You are in a quiet and ordinary room." }
         };
         
         if (typeDescriptions.TryGetValue(roomType, out string? description))

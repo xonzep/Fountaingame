@@ -1,6 +1,4 @@
 
-using System.Reflection.Metadata.Ecma335;
-
 namespace FountainOfObjects;
 
 public class Player
@@ -10,9 +8,8 @@ public class Player
     
     private readonly World _world;
     public bool IsAlive { get; set; }
-    public bool FountainOn { get; set; }
-    
-    
+
+
     //Constructor takes in the room map, and the players location most importantly.
     public Player(Location location, int health, bool isAlive,World world)
     {
@@ -20,7 +17,6 @@ public class Player
         Health = health;
         IsAlive = isAlive;
         _world = world;
-        FountainOn = false;
     }
 
     public bool IsOnMap(Location location)
@@ -29,51 +25,59 @@ public class Player
               location.Col >= 0 && location.Col < _world.GridSize;
     }
     
-
-    private Direction UserInput(string? userInput)
+    //This handles our user input. It continues to ask until it relives a valid input. Might be better to pull this out
+    //to it's own class, but meh.
+    public Direction ReturnUserDirection()
     {
-
-        Direction switchDirection;
-       switch (userInput)
-       {
-           case "move north":
-           case "north":
-              switchDirection = Direction.North;
-              break;
-           case "move south":
-           case "south":
-               switchDirection = Direction.South;
-               break;
-           case "move east":
-           case "east":
-               switchDirection = Direction.East;
-               break;
-           case "move west":
-           case "west":
-               switchDirection = Direction.West;
-               break;
-           default:
-               switchDirection = Direction.Unknown;
-               break;
-           
-       }
         
+        while(true)
+        {
+            string userInput = GetUserInput();
+            switch (userInput)
+            {
+                case "move north":
+                case "north":
+                    return Direction.North;
 
-       if (switchDirection == Direction.Unknown)
-       {
-           HelperUtils.WriteColorLine("That is not an option.", ConsoleColor.Red);
-           UserInputSelection();
+                case "move south":
+                case "south":
+                    return Direction.South;
 
-       }
-       return switchDirection;
+                case "move east":
+                case "east":
+                    return Direction.East;
+
+                case "move west":
+                case "west":
+                    return Direction.West;
+                
+                case "turn on fountain":
+                case "turn on":
+                    return Direction.TurnOn;
+                
+                case "sense the area":
+                case "sense":
+                    return Direction.Sense;
+                
+                case "quit":
+                case "exit":
+                    return Direction.Quit;
+                    
+                default:
+                    HelperUtils.WriteColorLine("That is not an option. Please choose a direction.", ConsoleColor.Red);
+                    break;
+            }
+
+        }
+        
+        
     }
    
-   public Direction UserInputSelection()
+   private string GetUserInput()
    {
        HelperUtils.WriteColorLine("What do you want to do? Options are 'North', 'South', 'East', 'West', 'Turn On', 'Quit' ", ConsoleColor.Green);
        string? userInput = Console.ReadLine()?.ToLower();
-       Direction direction = UserInput(userInput);
-       return direction;
+       return userInput;
        
    }
     
@@ -83,7 +87,6 @@ public class Player
 //North is UP, South is DOWN, East is RIGHT, West is LEFT
 public enum Direction
 {
-    Unknown,
     North,
     South,
     East,

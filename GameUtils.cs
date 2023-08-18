@@ -1,6 +1,6 @@
 namespace FountainOfObjects;
 
-public class GameUtils
+public abstract class GameUtils
 {
     public static Location GetLocationInDirection(Location currentLocation, Direction direction)
     {
