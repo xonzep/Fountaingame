@@ -10,9 +10,11 @@ namespace FountainOfObjects;
 
 public class Room
 {
-    public string? Description { get; }
+    public string? Description { get; private set; }
 
     public RoomTypes RoomTypes { get; set; }
+    
+    
 
     public Room(RoomTypes roomTypes)
     {
@@ -20,7 +22,7 @@ public class Room
         Description = RoomDescription(roomTypes);
     }
     
-    public string? RoomDescription(RoomTypes roomType)
+    private string RoomDescription(RoomTypes roomType)
     {
         
         //Apparently we can use a dictionary to return our description instead of a switch statement.
@@ -35,10 +37,16 @@ public class Room
         
         if (typeDescriptions.TryGetValue(roomType, out string? description))
         {
+            
             return description;
         }
 
         return "You should not see this.";
+    }
+    
+    public void UpdateDescription()
+    {
+        Description = RoomDescription(RoomTypes);
     }
 
     

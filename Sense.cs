@@ -15,7 +15,9 @@ public class Sense
     private string? SenseDescription(Location location, Direction direction)
     {
         //This makes it easier to add sense description based on room types. 
+        
         RoomTypes? roomTypes = _world.ReturnRoom(location).RoomTypes;
+        
         
         Dictionary<RoomTypes, string> specialRoomSensed = new()
         {           //key                   //Value

@@ -4,11 +4,11 @@ public static class Game
 {
     private static readonly World World;
     private static readonly Player Player;
-    private static readonly Sense sense;
+    private static readonly Sense Sense;
     public static bool QuitRequested { get;  set; }
-    public static bool InFountainRoom { get; }
     public static bool FountainOn { get; set; }
     public static bool SenseCalled { get; set; }
+    public static bool InFountainRoom { get; }
 
     static Game()
     {
@@ -16,7 +16,7 @@ public static class Game
         Location start = new(0, 0);
         //shoving the world map here is not the greatest.
         Player = new Player(start, 10, true, World);
-        sense = new Sense(World, Player);
+        Sense = new Sense(World, Player);
     }
     public static void Run()
     {
@@ -45,7 +45,7 @@ public static class Game
             //There's a better way to do this, I'm sure. But for now, this will work.
             if (SenseCalled)
             {
-                sense.SenseNearBy();
+                Sense.SenseNearBy();
                 SenseCalled = false;
             }
         }

@@ -42,8 +42,6 @@ public class World
                 _roomMap.Add((row, col), new Room(RoomTypes.Empty));
             }
         }
-        //Change empty type rooms to others based on a percentage. We don't need this quite yet.
-        //PercentageRoomChance();
         //Set rooms that don't change.
         SetEntrance();
         AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.3f, 1);
@@ -52,19 +50,23 @@ public class World
 
     private void AddRoomsByPercentageWithLimit(RoomTypes roomType, double percentage, int maxRoomsOfType)
     {
-        //This isn't working. It doesn't add pit rooms to the map.
-        int roomsAdded = 0;
-        Console.WriteLine(roomsAdded);
-        
-        foreach (KeyValuePair<(int, int), Room> roomEntry in _roomMap)
+        for (int roomsAdded = 0; roomsAdded < maxRoomsOfType;)
         {
             double randomPercent = HelperUtils.GenerateRandomPercent();
-            if (randomPercent < percentage && roomsAdded < maxRoomsOfType )
+
+            if (randomPercent < percentage)
             {
-                roomEntry.Value.RoomTypes = roomType;
-                roomsAdded++;
+                KeyValuePair<(int, int), Room> randomRoomEntry = _roomMap.ElementAt(HelperUtils.GetRandomNumber(_roomMap.Count));
+                if (randomRoomEntry.Value.RoomTypes == RoomTypes.Empty)
+                {
+                    randomRoomEntry.Value.RoomTypes = roomType;
+                    randomRoomEntry.Value.UpdateDescription();
+                    roomsAdded++;
+                    
+                }
             }
         }
+        
     }
     
     
@@ -80,10 +82,11 @@ public class World
         
             if ( turnOn == Direction.TurnOn && Game.InFountainRoom)
             {
+                Game.FountainOn = true;
                 _roomMap[(2, 3)] = new Room(RoomTypes.FountainOn);
             }
 
-            Game.FountainOn = true;
+           
 
             if (turnOn == Direction.TurnOn && Game.InFountainRoom && Game.FountainOn)
             {
@@ -93,7 +96,7 @@ public class World
 
     public Room ReturnRoom(Location location)
     {
-        _roomMap.TryGetValue((location.Col, location.Row), out Room? room);
+        _roomMap.TryGetValue((location.Row, location.Col), out Room? room);
         return room!;
     }
     
@@ -101,16 +104,19 @@ public class World
     public void CheckWinState(Player player)
     {
         Room room = ReturnRoom(player.Location);
-        switch (room.RoomTypes)
+        if (room.RoomTypes == RoomTypes.Entrance && Game.FountainOn)
         {
-            case RoomTypes.Entrance when Game.FountainOn:
-                HelperUtils.WriteColorLine("The Fountain is running. You have done what you've come to do. You leave with a lighter heart.", ConsoleColor.DarkYellow);
+            
+                HelperUtils.WriteColorLine(
+                    "The Fountain is running. You have done what you've come to do. You leave with a lighter heart.",
+                    ConsoleColor.DarkYellow);
                 Thread.Sleep(5000);
                 GameFinished = true;
-                break;
-            case RoomTypes.Entrance when !Game.FountainOn && !Game.QuitRequested:
-                HelperUtils.WriteColorLine("There is something you need to do before leaving.", ConsoleColor.Cyan);
-                break;
+            
+        }
+        else if (room.RoomTypes == RoomTypes.Entrance && (!Game.FountainOn && !Game.QuitRequested))
+        {
+            HelperUtils.WriteColorLine("There is something you need to do before leaving.", ConsoleColor.Cyan);
         }
     }
     
@@ -150,5 +156,5 @@ public enum WorldSize
 }
 
 //The location of objects. Seems better to store it here.
-public record Location(int Col, int Row);
+public record Location(int Row, int Col);
 
