@@ -6,6 +6,7 @@ public class World
     private readonly Dictionary<(int, int), Room> _roomMap = new();
     public int GridSize { get; private set; }
     public bool GameFinished;
+    private WorldSize _currentWorldSize;
 
     private static WorldSize UserChooseWorldSize()
     {
@@ -42,18 +43,36 @@ public class World
                 _roomMap.Add((row, col), new Room(RoomTypes.Empty));
             }
         }
-        //Set rooms that don't change.
+        //Set entrance
         SetEntrance();
-        AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.3f, 1);
+        AddRoomsForSize(_currentWorldSize);
         
+        
+    }
+
+    private void AddRoomsForSize(WorldSize option)
+    {
+        switch (option)
+        {
+            case WorldSize.Small:
+                AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.3, 1);
+                break;
+            case WorldSize.Medium:
+                AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.3, 2);
+                break;
+            case WorldSize.Large:
+                AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.3, 4);
+                break;
+        }
     }
 
     private void AddRoomsByPercentageWithLimit(RoomTypes roomType, double percentage, int maxRoomsOfType)
     {
         for (int roomsAdded = 0; roomsAdded < maxRoomsOfType;)
         {
+            Console.WriteLine(maxRoomsOfType);
+           
             double randomPercent = HelperUtils.GenerateRandomPercent();
-
             if (randomPercent < percentage)
             {
                 KeyValuePair<(int, int), Room> randomRoomEntry = _roomMap.ElementAt(HelperUtils.GetRandomNumber(_roomMap.Count));
@@ -62,7 +81,6 @@ public class World
                     randomRoomEntry.Value.RoomTypes = roomType;
                     randomRoomEntry.Value.UpdateDescription();
                     roomsAdded++;
-                    
                 }
             }
         }
@@ -118,6 +136,11 @@ public class World
         {
             HelperUtils.WriteColorLine("There is something you need to do before leaving.", ConsoleColor.Cyan);
         }
+
+        if (room.RoomTypes == RoomTypes.Pit)
+        {
+            player.PlayerDeath();
+        }
     }
     
     public void SetWorldSize()
@@ -125,17 +148,20 @@ public class World
         switch (UserChooseWorldSize())
         {
             case WorldSize.Small:
+                _currentWorldSize = WorldSize.Small;
                 AddRooms(4);
                 //Set fountain for world size.
                 _roomMap[(2, 3)] = new Room(RoomTypes.Fountain);
                 break;
 
             case WorldSize.Medium:
+                _currentWorldSize = WorldSize.Medium;
                 AddRooms(6);
                 _roomMap[(3, 4)] = new Room(RoomTypes.Fountain);
                 break;
 
             case WorldSize.Large:
+                _currentWorldSize = WorldSize.Large;
                 AddRooms(8);
                 _roomMap[(4, 5)] = new Room(RoomTypes.Fountain);
                 break;

@@ -36,10 +36,13 @@ public static class Game
             moveCommand.Execute(Player);
             World.CheckWinState(Player);
             World.TurnOn(input);
+           
+            
 
             
-            if (QuitRequested)
+            if (QuitRequested || !Player.IsAlive)
             {
+                Thread.Sleep(2000);
                 break;
             }
             //There's a better way to do this, I'm sure. But for now, this will work.

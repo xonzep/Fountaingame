@@ -80,7 +80,15 @@ public class Player
        return userInput;
        
    }
-    
+
+   public void PlayerDeath()
+   {
+       HelperUtils.WriteColorLine(_world.ReturnRoom(Location).Description, ConsoleColor.DarkRed);
+       HelperUtils.WriteColorLine("Game Over", ConsoleColor.Red);
+       IsAlive = false;
+   }
+   
+
 
 }
 

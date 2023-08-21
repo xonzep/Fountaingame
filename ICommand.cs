@@ -21,6 +21,7 @@ public class MoveCommand: ICommand
             Game.QuitRequested = true;
             return;
         }
+        
 
         if (Direction == Direction.Sense)
         {
