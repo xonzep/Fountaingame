@@ -43,28 +43,31 @@ public class World
             }
         }
         //Change empty type rooms to others based on a percentage. We don't need this quite yet.
-        //PercentageRoomChange();
+        //PercentageRoomChance();
         //Set rooms that don't change.
         SetEntrance();
+        AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.3f, 1);
         
     }
-    
 
-    private void PercentageRoomChange()
+    private void AddRoomsByPercentageWithLimit(RoomTypes roomType, double percentage, int maxRoomsOfType)
     {
+        //This isn't working. It doesn't add pit rooms to the map.
+        int roomsAdded = 0;
+        Console.WriteLine(roomsAdded);
+        
         foreach (KeyValuePair<(int, int), Room> roomEntry in _roomMap)
         {
-            (int col, int row) = roomEntry.Key;
-            Room room = roomEntry.Value;
-
-            if (room.RoomTypes is RoomTypes.Entrance or RoomTypes.Fountain)
+            double randomPercent = HelperUtils.GenerateRandomPercent();
+            if (randomPercent < percentage && roomsAdded < maxRoomsOfType )
             {
-                continue;
+                roomEntry.Value.RoomTypes = roomType;
+                roomsAdded++;
             }
-            
-            _roomMap[(row, col)] = room;
         }
     }
+    
+    
     private void SetEntrance()
     {
         _roomMap[(0, 0)] = new Room(RoomTypes.Entrance);

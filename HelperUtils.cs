@@ -4,7 +4,7 @@ public static class HelperUtils
 {
     private static readonly Random Random = new();
     //Create new line with color.
-    public static void WriteColorLine(string text, ConsoleColor color)
+    public static void WriteColorLine(string? text, ConsoleColor color)
     {
         Console.ForegroundColor = color;
         Console.WriteLine(text);
@@ -26,7 +26,7 @@ public static class HelperUtils
         return Random.NextDouble();
     }
 
-    private static int GetRandomNumber(int maxValue)
+    public static int GetRandomNumber(int maxValue)
     {
         return Random.Next(maxValue);
     }

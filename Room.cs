@@ -10,7 +10,7 @@ namespace FountainOfObjects;
 
 public class Room
 {
-    public string Description { get; set; }
+    public string? Description { get; }
 
     public RoomTypes RoomTypes { get; set; }
 
@@ -20,7 +20,7 @@ public class Room
         Description = RoomDescription(roomTypes);
     }
     
-    public string RoomDescription(RoomTypes roomType)
+    public string? RoomDescription(RoomTypes roomType)
     {
         
         //Apparently we can use a dictionary to return our description instead of a switch statement.
@@ -29,7 +29,8 @@ public class Room
             { RoomTypes.Entrance, "You see light coming from the cave entrance." },
             { RoomTypes.Fountain, "There is a dripping sound here." },
             { RoomTypes.FountainOn, "The sound of flowing water fills the room. The Fountain is on." },
-            { RoomTypes.Empty,    "You are in a quiet and ordinary room." }
+            { RoomTypes.Empty,    "You are in a quiet and ordinary room." },
+            { RoomTypes.Pit,  "You fall into a pit an die."}
         };
         
         if (typeDescriptions.TryGetValue(roomType, out string? description))
@@ -48,5 +49,6 @@ public enum RoomTypes
     Empty,
     Entrance,
     Fountain,
-    FountainOn
+    FountainOn,
+    Pit
 }

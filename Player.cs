@@ -32,7 +32,7 @@ public class Player
         
         while(true)
         {
-            string userInput = GetUserInput();
+            string? userInput = GetUserInput();
             switch (userInput)
             {
                 case "move north":
@@ -73,7 +73,7 @@ public class Player
         
     }
    
-   private string GetUserInput()
+   private string? GetUserInput()
    {
        HelperUtils.WriteColorLine("What do you want to do? Options are 'North', 'South', 'East', 'West', 'Turn On', 'Quit' ", ConsoleColor.Green);
        string? userInput = Console.ReadLine()?.ToLower();

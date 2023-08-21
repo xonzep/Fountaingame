@@ -6,7 +6,7 @@ public static class Game
     private static readonly Player Player;
     private static readonly Sense sense;
     public static bool QuitRequested { get;  set; }
-    public static bool InFountainRoom { get; set; }
+    public static bool InFountainRoom { get; }
     public static bool FountainOn { get; set; }
     public static bool SenseCalled { get; set; }
 
