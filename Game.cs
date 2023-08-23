@@ -2,8 +2,8 @@ namespace FountainOfObjects;
 
 public static class Game
 {
-    private static readonly World World;
-    private static readonly Player Player;
+    public static readonly World World;
+    public static readonly Player Player;
     private static readonly Sense Sense;
     public static bool QuitRequested { get;  set; }
     public static bool FountainOn { get; set; }

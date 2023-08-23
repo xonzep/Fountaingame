@@ -28,7 +28,6 @@ public class World
                     HelperUtils.WriteColorLine("Invalid input. Please enter 'small', 'medium', or 'large'.", ConsoleColor.Red);
                     break;
             }
-
         }
     }
 
@@ -46,8 +45,6 @@ public class World
         //Set entrance
         SetEntrance();
         AddRoomsForSize(_currentWorldSize);
-        
-        
     }
 
     private void AddRoomsForSize(WorldSize option)
@@ -55,13 +52,19 @@ public class World
         switch (option)
         {
             case WorldSize.Small:
-                AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.3, 1);
+                _roomMap[(2, 3)] = new Room(RoomTypes.Fountain);
+                AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.6, 1);
+                AddRoomsByPercentageWithLimit(RoomTypes.Maelstrom, 0.3, 1);
                 break;
             case WorldSize.Medium:
-                AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.3, 2);
+                _roomMap[(3, 4)] = new Room(RoomTypes.Fountain);
+                AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.6, 2);
+                AddRoomsByPercentageWithLimit(RoomTypes.Maelstrom, 0.3, 1);
                 break;
             case WorldSize.Large:
-                AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.3, 4);
+                _roomMap[(4, 5)] = new Room(RoomTypes.Fountain);
+                AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.6, 4);
+                AddRoomsByPercentageWithLimit(RoomTypes.Maelstrom, 0.3, 2);
                 break;
         }
     }
@@ -70,8 +73,6 @@ public class World
     {
         for (int roomsAdded = 0; roomsAdded < maxRoomsOfType;)
         {
-            Console.WriteLine(maxRoomsOfType);
-           
             double randomPercent = HelperUtils.GenerateRandomPercent();
             if (randomPercent < percentage)
             {
@@ -141,7 +142,13 @@ public class World
         {
             player.PlayerDeath();
         }
+        
+        if (room.RoomTypes == RoomTypes.Maelstrom)
+        {
+            Monsters.MaelstromAttack(player, Game.World);
+        }
     }
+    
     
     public void SetWorldSize()
     {
@@ -151,19 +158,19 @@ public class World
                 _currentWorldSize = WorldSize.Small;
                 AddRooms(4);
                 //Set fountain for world size.
-                _roomMap[(2, 3)] = new Room(RoomTypes.Fountain);
+                
                 break;
 
             case WorldSize.Medium:
                 _currentWorldSize = WorldSize.Medium;
                 AddRooms(6);
-                _roomMap[(3, 4)] = new Room(RoomTypes.Fountain);
+                
                 break;
 
             case WorldSize.Large:
                 _currentWorldSize = WorldSize.Large;
                 AddRooms(8);
-                _roomMap[(4, 5)] = new Room(RoomTypes.Fountain);
+                
                 break;
 
             default:

@@ -24,7 +24,8 @@ public class Sense
             { RoomTypes.Pit,  $"You feel a draft of air from {direction}, and it sends a deathly chill down your spine."},
             { RoomTypes.Fountain,  $"You hear dripping to the {direction}" },
             { RoomTypes.Entrance, $"In the {direction}, you can see the faint glow of the outside." },
-            { RoomTypes.Empty, $"In the {direction} you sense an {roomTypes} room"}
+            { RoomTypes.Empty, $"In the {direction} you sense an {roomTypes} room"},
+            { RoomTypes.Maelstrom, $"You hear the growling and moaning of a maelstrom in the {direction}."}
             
         };
 
@@ -39,6 +40,7 @@ public class Sense
         foreach (Direction direction in directionsAroundPlayer)
         {
             Location locationToCheck = GameUtils.GetLocationInDirection(_player.Location, direction);
+            Console.WriteLine(_player.Location);
             
             if (!_player.IsOnMap(locationToCheck))
             {
