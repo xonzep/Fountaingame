@@ -35,7 +35,7 @@ public class Sense
     
     public void SenseNearBy()
     {
-        Direction[] directionsAroundPlayer = { Direction.North, Direction.East, Direction.South, Direction.West };
+        Direction[] directionsAroundPlayer = { Direction.North, Direction.NorthEast, Direction.NorthWest, Direction.East, Direction.South, Direction.SouthEast, Direction.SouthWest, Direction.West };
         foreach (Direction direction in directionsAroundPlayer)
         {
             Location locationToCheck = GameUtils.GetLocationInDirection(_player.Location, direction);

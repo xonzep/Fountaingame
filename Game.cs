@@ -15,7 +15,7 @@ public static class Game
         World = new World();
         Location start = new(0, 0);
         //shoving the world map here is not the greatest.
-        Player = new Player(start, 10, true, World);
+        Player = new Player(start, true, World);
         Sense = new Sense(World, Player);
     }
     public static void Run()

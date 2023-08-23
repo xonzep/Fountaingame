@@ -3,7 +3,7 @@ namespace FountainOfObjects;
 
 public class World
 {
-    private readonly Dictionary<(int, int), Room> _roomMap = new();
+    public readonly Dictionary<(int, int), Room> _roomMap = new();
     public int GridSize { get; private set; }
     public bool GameFinished;
     private WorldSize _currentWorldSize;

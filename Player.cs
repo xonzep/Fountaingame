@@ -4,17 +4,16 @@ namespace FountainOfObjects;
 public class Player
 {
     public Location Location { get; set; }
-    public int Health { get; set; }
+    
     
     private readonly World _world;
-    public bool IsAlive { get; set; }
+    public bool IsAlive { get; private set; }
 
 
     //Constructor takes in the room map, and the players location most importantly.
-    public Player(Location location, int health, bool isAlive,World world)
+    public Player(Location location, bool isAlive,World world)
     {
         Location = location;
-        Health = health;
         IsAlive = isAlive;
         _world = world;
     }
@@ -96,7 +95,11 @@ public class Player
 public enum Direction
 {
     North,
+    NorthEast,
+    NorthWest,
     South,
+    SouthEast,
+    SouthWest,
     East,
     West,
     Quit,

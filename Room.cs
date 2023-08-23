@@ -26,13 +26,15 @@ public class Room
     {
         
         //Apparently we can use a dictionary to return our description instead of a switch statement.
+        //Monsters kill instantly so monsters are just roomtypes.
         Dictionary<RoomTypes, string> typeDescriptions = new()
         {           //key                   //Value
             { RoomTypes.Entrance, "You see light coming from the cave entrance." },
             { RoomTypes.Fountain, "There is a dripping sound here." },
             { RoomTypes.FountainOn, "The sound of flowing water fills the room. The Fountain is on." },
             { RoomTypes.Empty,    "You are in a quiet and ordinary room." },
-            { RoomTypes.Pit,  "You fall into a pit an die."}
+            { RoomTypes.Pit,  "You fall into a pit and die."},
+            {RoomTypes.Maelstrom, "You encounter a monster of wind. It's attack blows you out of the room"}
         };
         
         if (typeDescriptions.TryGetValue(roomType, out string? description))
@@ -58,5 +60,6 @@ public enum RoomTypes
     Entrance,
     Fountain,
     FountainOn,
-    Pit
+    Pit,
+    Maelstrom
 }
