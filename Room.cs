@@ -34,7 +34,8 @@ public class Room
             { RoomTypes.FountainOn, "The sound of flowing water fills the room. The Fountain is on." },
             { RoomTypes.Empty,    "You are in a quiet and ordinary room." },
             { RoomTypes.Pit,  "You fall into a pit and die."},
-            {RoomTypes.Maelstrom, "You encounter a monster of wind. It's attack blows you out of the room"}
+            {RoomTypes.Maelstrom, "You encounter a monster of wind. It's attack blows you out of the room"},
+            { RoomTypes.Amaroks , "You encounter a monster of decay. It attacks you, ripping your body to shreds. You die."}
         };
         
         if (typeDescriptions.TryGetValue(roomType, out string? description))
@@ -61,5 +62,6 @@ public enum RoomTypes
     Fountain,
     FountainOn,
     Pit,
-    Maelstrom
+    Maelstrom,
+    Amaroks
 }

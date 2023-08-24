@@ -4,7 +4,8 @@ namespace FountainOfObjects;
 public class Player
 {
     public Location Location { get; set; }
-    
+
+    public int arrowAmount = 5;
     
     private readonly World _world;
     public bool IsAlive { get; private set; }
@@ -50,6 +51,18 @@ public class Player
                 case "west":
                     return Direction.West;
                 
+                case "shoot north":
+                    return Direction.North;
+                
+                case "shoot south":
+                    return Direction.South;
+                
+                case "shoot east":
+                    return Direction.East;
+                
+                case "shoot west":
+                    return Direction.West;
+                
                 case "turn on fountain":
                 case "turn on":
                     return Direction.TurnOn;
@@ -74,7 +87,7 @@ public class Player
    
    private string? GetUserInput()
    {
-       HelperUtils.WriteColorLine("What do you want to do? Options are 'North', 'South', 'East', 'West', 'Turn On', 'Quit' ", ConsoleColor.Green);
+       HelperUtils.WriteColorLine("What do you want to do? Options are 'North', 'South', 'East', 'West', 'Shoot [Direction]' 'Turn On', 'Quit' ", ConsoleColor.Green);
        string? userInput = Console.ReadLine()?.ToLower();
        return userInput;
        
@@ -86,7 +99,36 @@ public class Player
        HelperUtils.WriteColorLine("Game Over", ConsoleColor.Red);
        IsAlive = false;
    }
-   
+
+   public void ShootArrow(Direction direction)
+   {
+       //Player can shoot an arrow in the four directions. So we take in direction which is returned from the input
+       //fire an arrow and change the room type to RoomType.empty if not fountain or entrance. Then decrease amount of arrows.
+       
+       Location locationToShoot = GameUtils.GetLocationInDirection(Location, direction);
+       if (arrowAmount > 0)
+       {
+           RoomTypes checkRoom = _world.ReturnRoom(locationToShoot).RoomTypes;
+           if (IsOnMap(locationToShoot) && checkRoom == RoomTypes.Amaroks || checkRoom == RoomTypes.Maelstrom)
+           {
+               arrowAmount--;
+               HelperUtils.WriteColorLine($"Your arrow sails into the room and you hear the death sounds of a creature. It is now safe to go {direction}.", ConsoleColor.Magenta);
+               Room room = _world.ReturnRoom(locationToShoot);
+               room.RoomTypes = RoomTypes.Empty;
+               room.UpdateDescription();
+               
+           }
+           else
+           {
+               arrowAmount--;
+               HelperUtils.WriteColorLine("Your arrow bounces off the wall and breaks. It can't be repaired.",
+                   ConsoleColor.Red);
+               
+           }
+       }
+
+
+   }
 
 
 }

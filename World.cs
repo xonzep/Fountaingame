@@ -55,21 +55,24 @@ public class World
                 _roomMap[(2, 3)] = new Room(RoomTypes.Fountain);
                 AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.6, 1);
                 AddRoomsByPercentageWithLimit(RoomTypes.Maelstrom, 0.3, 1);
+                AddRoomsByPercentageWithLimit(RoomTypes.Amaroks, 0.8, 1);
                 break;
             case WorldSize.Medium:
                 _roomMap[(3, 4)] = new Room(RoomTypes.Fountain);
                 AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.6, 2);
                 AddRoomsByPercentageWithLimit(RoomTypes.Maelstrom, 0.3, 1);
+                AddRoomsByPercentageWithLimit(RoomTypes.Amaroks, 0.8, 2);
                 break;
             case WorldSize.Large:
                 _roomMap[(4, 5)] = new Room(RoomTypes.Fountain);
                 AddRoomsByPercentageWithLimit(RoomTypes.Pit, 0.6, 4);
                 AddRoomsByPercentageWithLimit(RoomTypes.Maelstrom, 0.3, 2);
+                AddRoomsByPercentageWithLimit(RoomTypes.Amaroks, 0.8, 3);
                 break;
         }
     }
 
-    private void AddRoomsByPercentageWithLimit(RoomTypes roomType, double percentage, int maxRoomsOfType)
+    public void AddRoomsByPercentageWithLimit(RoomTypes roomType, double percentage, int maxRoomsOfType)
     {
         for (int roomsAdded = 0; roomsAdded < maxRoomsOfType;)
         {
@@ -92,21 +95,17 @@ public class World
     private void SetEntrance()
     {
         _roomMap[(0, 0)] = new Room(RoomTypes.Entrance);
-        
     }
 
     
     public void TurnOn(Direction turnOn)
     {
-        
             if ( turnOn == Direction.TurnOn && Game.InFountainRoom)
             {
                 Game.FountainOn = true;
                 _roomMap[(2, 3)] = new Room(RoomTypes.FountainOn);
             }
-
-           
-
+        
             if (turnOn == Direction.TurnOn && Game.InFountainRoom && Game.FountainOn)
             {
                 HelperUtils.WriteColorLine("The Fountain is already turned on and flowing.", ConsoleColor.Cyan);
@@ -123,32 +122,29 @@ public class World
     public void CheckWinState(Player player)
     {
         Room room = ReturnRoom(player.Location);
-        if (room.RoomTypes == RoomTypes.Entrance && Game.FountainOn)
+        switch (room.RoomTypes)
         {
-            
+            case RoomTypes.Entrance when Game.FountainOn:
                 HelperUtils.WriteColorLine(
                     "The Fountain is running. You have done what you've come to do. You leave with a lighter heart.",
                     ConsoleColor.DarkYellow);
                 Thread.Sleep(5000);
                 GameFinished = true;
-            
-        }
-        else if (room.RoomTypes == RoomTypes.Entrance && (!Game.FountainOn && !Game.QuitRequested))
-        {
-            HelperUtils.WriteColorLine("There is something you need to do before leaving.", ConsoleColor.Cyan);
-        }
-
-        if (room.RoomTypes == RoomTypes.Pit)
-        {
-            player.PlayerDeath();
-        }
-        
-        if (room.RoomTypes == RoomTypes.Maelstrom)
-        {
-            Monsters.MaelstromAttack(player, Game.World);
+                break;
+            case RoomTypes.Entrance when (!Game.FountainOn && !Game.QuitRequested):
+                HelperUtils.WriteColorLine("There is something you need to do before leaving.", ConsoleColor.Cyan);
+                break;
+            case RoomTypes.Pit:
+                player.PlayerDeath();
+                break;
+            case RoomTypes.Maelstrom:
+                Monsters.MaelstromAttack(player, Game.World);
+                break;
+            case RoomTypes.Amaroks:
+                player.PlayerDeath();
+                break;
         }
     }
-    
     
     public void SetWorldSize()
     {
@@ -177,8 +173,6 @@ public class World
                 throw new InvalidOperationException("Invalid World Size Chosen.");
         }
     }
-    
-    
 }
 
 public enum WorldSize

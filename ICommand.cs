@@ -44,8 +44,6 @@ public class MoveCommand: ICommand
 
         Location currentLocation = player.Location;
         Location newLocation = GameUtils.GetLocationInDirection(currentLocation, Direction);
-       
-
         if (player.IsOnMap(newLocation))
         {
             player.Location = newLocation;

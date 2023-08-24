@@ -25,7 +25,8 @@ public class Sense
             { RoomTypes.Fountain,  $"You hear dripping to the {direction}" },
             { RoomTypes.Entrance, $"In the {direction}, you can see the faint glow of the outside." },
             { RoomTypes.Empty, $"In the {direction} you sense an {roomTypes} room"},
-            { RoomTypes.Maelstrom, $"You hear the growling and moaning of a maelstrom in the {direction}."}
+            { RoomTypes.Maelstrom, $"You hear the growling and moaning of a maelstrom in the {direction}."},
+            { RoomTypes.Amaroks , $"You can smell the rotting decay of something to the {direction}."}
             
         };
 
