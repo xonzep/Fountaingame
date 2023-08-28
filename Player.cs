@@ -4,8 +4,8 @@ namespace FountainOfObjects;
 public class Player
 {
     public Location Location { get; set; }
-
-    public int arrowAmount = 5;
+//for our shooting function.
+    private  int _arrowAmount = 5;
     
     private readonly World _world;
     public bool IsAlive { get; private set; }
@@ -52,16 +52,20 @@ public class Player
                     return Direction.West;
                 
                 case "shoot north":
-                    return Direction.North;
+                    ShootArrow(Direction.North);
+                    break;
                 
                 case "shoot south":
-                    return Direction.South;
+                   ShootArrow(Direction.South);
+                   break;
                 
                 case "shoot east":
-                    return Direction.East;
+                    ShootArrow(Direction.East);
+                    break;
                 
                 case "shoot west":
-                    return Direction.West;
+                    ShootArrow(Direction.West);
+                    break;
                 
                 case "turn on fountain":
                 case "turn on":
@@ -70,6 +74,10 @@ public class Player
                 case "sense the area":
                 case "sense":
                     return Direction.Sense;
+                
+                case "Help":
+                    GameUtils.HelpText();
+                    break;
                 
                 case "quit":
                 case "exit":
@@ -87,7 +95,7 @@ public class Player
    
    private string? GetUserInput()
    {
-       HelperUtils.WriteColorLine("What do you want to do? Options are 'North', 'South', 'East', 'West', 'Shoot [Direction]' 'Turn On', 'Quit' ", ConsoleColor.Green);
+       HelperUtils.WriteColorLine("What would you like to do? Options are 'North', 'South', 'East', 'West', 'Shoot [Direction]' 'Turn On', 'Quit' ", ConsoleColor.Green);
        string? userInput = Console.ReadLine()?.ToLower();
        return userInput;
        
@@ -100,37 +108,47 @@ public class Player
        IsAlive = false;
    }
 
-   public void ShootArrow(Direction direction)
+   private void ShootArrow(Direction direction)
    {
        //Player can shoot an arrow in the four directions. So we take in direction which is returned from the input
        //fire an arrow and change the room type to RoomType.empty if not fountain or entrance. Then decrease amount of arrows.
-       
+      
        Location locationToShoot = GameUtils.GetLocationInDirection(Location, direction);
-       if (arrowAmount > 0)
+       if (_arrowAmount > 0)
        {
-           RoomTypes checkRoom = _world.ReturnRoom(locationToShoot).RoomTypes;
-           if (IsOnMap(locationToShoot) && checkRoom == RoomTypes.Amaroks || checkRoom == RoomTypes.Maelstrom)
+           Room room = _world.ReturnRoom(locationToShoot);
+           if (IsOnMap(locationToShoot))
            {
-               arrowAmount--;
-               HelperUtils.WriteColorLine($"Your arrow sails into the room and you hear the death sounds of a creature. It is now safe to go {direction}.", ConsoleColor.Magenta);
-               Room room = _world.ReturnRoom(locationToShoot);
-               room.RoomTypes = RoomTypes.Empty;
-               room.UpdateDescription();
+               if (room.RoomTypes is RoomTypes.Amaroks or RoomTypes.Maelstrom)
+               {
+                   _arrowAmount-=1;
+                   HelperUtils.WriteColorLine($"You have {_arrowAmount} arrows left", ConsoleColor.Red);
+                   HelperUtils.WriteColorLine($"Your arrow sails into the room and you hear the death sounds of a creature. It is now safe to go {direction}.", ConsoleColor.Magenta);
+                   room.RoomTypes = RoomTypes.Empty;
+                   room.UpdateDescription();
+               }
+               else
+               {
+                   _arrowAmount-=1;
+                   HelperUtils.WriteColorLine($"You have {_arrowAmount} arrows left", ConsoleColor.Red);
+                   HelperUtils.WriteColorLine("Your arrow bounces off the wall and breaks. It can't be repaired.",
+                       ConsoleColor.Red);
                
+               }
            }
            else
            {
-               arrowAmount--;
+               _arrowAmount-=1;
+               HelperUtils.WriteColorLine($"You have {_arrowAmount} arrows left", ConsoleColor.Red);
                HelperUtils.WriteColorLine("Your arrow bounces off the wall and breaks. It can't be repaired.",
                    ConsoleColor.Red);
-               
            }
        }
-
-
+       else
+       {
+           HelperUtils.WriteColorLine("You have no more arrows left to shoot.", ConsoleColor.Red);
+       }
    }
-
-
 }
 
 //North is UP, South is DOWN, East is RIGHT, West is LEFT

@@ -28,6 +28,10 @@ public static class Game
 
     private static void GameLoop()
     {
+        GameUtils.HelpIntro();
+        Thread.Sleep(15000);
+        Console.Clear();
+        HelperUtils.WriteColorLine("You have 5 arrows to shoot.", ConsoleColor.Red);
         while (!World.GameFinished && !QuitRequested)
         {
             HelperUtils.WriteColorLine(World.ReturnRoom(Player.Location).Description, ConsoleColor.Yellow);

@@ -41,6 +41,8 @@ public class MoveCommand: ICommand
             return;
         }
         
+        
+        
 
         Location currentLocation = player.Location;
         Location newLocation = GameUtils.GetLocationInDirection(currentLocation, Direction);
