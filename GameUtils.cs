@@ -2,6 +2,13 @@ namespace FountainOfObjects;
 
 public abstract class GameUtils
 {
+    public static string TimeCheck(DateTime start, DateTime end)
+    {
+        TimeSpan between = end - start;
+        
+        return between.ToString(@"hh\:mm");
+
+    }
     public static Location GetLocationInDirection(Location currentLocation, Direction direction)
     {
         return direction switch

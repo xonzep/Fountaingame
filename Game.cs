@@ -28,8 +28,9 @@ public static class Game
 
     private static void GameLoop()
     {
+        DateTime timeStart = DateTime.Now;
         GameUtils.HelpIntro();
-        Thread.Sleep(15000);
+        Thread.Sleep(1500);
         Console.Clear();
         HelperUtils.WriteColorLine("You have 5 arrows to shoot.", ConsoleColor.Red);
         while (!World.GameFinished && !QuitRequested)
@@ -46,7 +47,9 @@ public static class Game
             
             if (QuitRequested || !Player.IsAlive)
             {
-                Thread.Sleep(2000);
+                DateTime timeEnd = DateTime.Now;
+                HelperUtils.WriteColorLine(GameUtils.TimeCheck(timeStart, timeEnd), ConsoleColor.Green);
+                Thread.Sleep(1000);
                 break;
             }
             //There's a better way to do this, I'm sure. But for now, this will work.
